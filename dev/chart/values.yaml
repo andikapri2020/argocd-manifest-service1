@@ -1,8 +1,8 @@
 replicaCount: 1
 
 image:
-  repository: registry.gitlab.com/org/myapp
-  tag: "develop-latest"
+  repository: andikapri/argocd-app-service1
+  tag: "20260418-1615-2"
   pullPolicy: Always
 
 imagePullSecrets:
