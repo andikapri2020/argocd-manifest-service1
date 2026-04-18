@@ -1,0 +1,56 @@
+replicaCount: 1
+
+image:
+  repository: registry.gitlab.com/org/myapp
+  tag: "develop-latest"
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: regcred
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+ingress:
+  enabled: true
+  className: nginx
+  host: myapp.dev.yourdomain.com
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi
+
+env:
+  APP_ENV: development
+  LOG_LEVEL: debug
+
+livenessProbe:
+  httpGet:
+    path: /hello
+    port: 8080
+  initialDelaySeconds: 10
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /hello
+    port: 8080
+  initialDelaySeconds: 5
+  periodSeconds: 5
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80

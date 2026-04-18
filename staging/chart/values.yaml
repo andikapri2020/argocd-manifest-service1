@@ -1,0 +1,56 @@
+replicaCount: 2
+
+image:
+  repository: registry.gitlab.com/org/myapp
+  tag: "1.0.0-rc.1"
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: regcred
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+ingress:
+  enabled: true
+  className: nginx
+  host: myapp.staging.yourdomain.com
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+env:
+  APP_ENV: staging
+  LOG_LEVEL: info
+
+livenessProbe:
+  httpGet:
+    path: /hello
+    port: 8080
+  initialDelaySeconds: 10
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /hello
+    port: 8080
+  initialDelaySeconds: 5
+  periodSeconds: 5
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70
