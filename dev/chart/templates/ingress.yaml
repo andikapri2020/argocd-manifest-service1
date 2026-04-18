@@ -22,4 +22,8 @@ spec:
                 name: {{ include "myapp.fullname" . }}
                 port:
                   number: {{ .Values.service.port }}
+  {{- with .Values.ingress.tls }}
+  tls:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 {{- end }}
