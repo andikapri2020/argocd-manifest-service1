@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: andikapri/argocd-app-service1
-  tag: "20260419-0050-3"
+  tag: "20260419-0620-4"
   pullPolicy: Always
 
 imagePullSecrets:
